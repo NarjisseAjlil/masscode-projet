@@ -1,0 +1,45 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["fullTextSearch", "fullTextIndex"]
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+
+model User {
+  id    Int     @id @default(autoincrement())
+  email String
+  password  String
+  picture String
+
+  snippets Snippet[]
+  
+}
+
+model Category {
+  id    Int     @id @default(autoincrement())
+  name String
+  user_id Int 
+  snippets Snippet[]
+}
+
+
+model Snippet {
+  id    Int     @id @default(autoincrement())
+  title String
+  content  String
+  language  String
+  created_at  DateTime
+  category_id Int
+  user_id  Int 
+
+  category Category @relation(fields: [category_id], references: [id])
+  user User @relation(fields: [user_id], references: [id])
+  
+}
